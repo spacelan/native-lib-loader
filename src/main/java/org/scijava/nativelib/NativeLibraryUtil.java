@@ -35,9 +35,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class is a utility for loading native libraries.
@@ -95,8 +94,7 @@ public class NativeLibraryUtil {
 
 	private static Architecture architecture = Architecture.UNKNOWN;
 	private static String archStr = null;
-	private static final Logger LOGGER = LoggerFactory.getLogger(
-		"org.scijava.nativelib.NativeLibraryUtil");
+	private static final Logger LOGGER = Logger.getLogger("org.scijava.nativelib.NativeLibraryUtil");
 
 	/**
 	 * Determines the underlying hardware platform and architecture.
@@ -151,7 +149,7 @@ public class NativeLibraryUtil {
 				}
 			}
 		}
-		LOGGER.debug("architecture is " + architecture + " os.name is " +
+		LOGGER.log(Level.FINE, "architecture is " + architecture + " os.name is " +
 			System.getProperty("os.name").toLowerCase());
 		return architecture;
 	}
@@ -188,7 +186,7 @@ public class NativeLibraryUtil {
 			}
 			processor = (32 == bits) ? Processor.INTEL_32 : Processor.INTEL_64;
 		}
-		LOGGER.debug("processor is " + processor + " os.arch is " +
+		LOGGER.log(Level.FINE, "processor is " + processor + " os.arch is " +
 			System.getProperty("os.arch").toLowerCase());
 		return processor;
 	}
@@ -209,7 +207,7 @@ public class NativeLibraryUtil {
 		// foolproof
 		String fullSearchPath = (searchPath.equals("") || searchPath.endsWith(DELIM) ?
 				searchPath : searchPath + DELIM) + archStr + DELIM;
-		LOGGER.debug("platform specific path is " + fullSearchPath);
+		LOGGER.log(Level.FINE, "platform specific path is " + fullSearchPath);
 		return fullSearchPath;
 	}
 
@@ -241,7 +239,7 @@ public class NativeLibraryUtil {
 			default:
 				break;
 		}
-		LOGGER.debug("native library name " + name);
+		LOGGER.log(Level.FINE, "native library name " + name);
 		return name;
 	}
 
@@ -318,7 +316,8 @@ public class NativeLibraryUtil {
 		final String libName, final String... searchPaths)
 	{
 		if (Architecture.UNKNOWN == getArchitecture()) {
-			LOGGER.warn("No native library available for this platform.");
+			LOGGER.log(Level.WARNING,
+				"No native library available for this platform.");
 		}
 		else {
 			try {
@@ -347,9 +346,9 @@ public class NativeLibraryUtil {
 				}
 			}
 			catch (final UnsatisfiedLinkError e) {
-				LOGGER.debug("Problem with library", e);
+				LOGGER.log(Level.FINE, "Problem with library", e);
 			} catch (IOException e) {
-				LOGGER.debug("Problem with extracting the library", e);
+				LOGGER.log(Level.FINE, "Problem with extracting the library", e);
 			}
 		}
 		return false;
@@ -370,7 +369,7 @@ public class NativeLibraryUtil {
 			return NativeLibraryUtil.loadNativeLibrary(new DefaultJniExtractor(libraryJarClass), libName);
 		}
 		catch (final IOException e) {
-			LOGGER.debug("IOException creating DefaultJniExtractor", e);
+			LOGGER.log(Level.FINE, "IOException creating DefaultJniExtractor", e);
 		}
 		return false;
 	}

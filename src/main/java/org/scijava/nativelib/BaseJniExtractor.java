@@ -46,17 +46,15 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.Enumeration;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Richard van der Hoff (richardv@mxtelecom.com)
  */
 public abstract class BaseJniExtractor implements JniExtractor {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(
-		"org.scijava.nativelib.BaseJniExtractor");
+	private static final Logger LOGGER = Logger.getLogger("org.scijava.nativelib.BaseJniExtractor");
 	protected static final String JAVA_TMPDIR = "java.io.tmpdir";
 	protected static final String ALTR_TMPDIR = "."+ NativeLibraryUtil.DELIM + "tmplib";
 	protected static final String TMP_PREFIX = "nativelib-loader_";
@@ -356,10 +354,10 @@ public abstract class BaseJniExtractor implements JniExtractor {
 	}
 
 	private static void debug(final String message) {
-		LOGGER.debug(message);
+		LOGGER.log(Level.FINE, message);
 	}
 
 	private static void error(final String message, final Throwable t) {
-		LOGGER.error(message, t);
+		LOGGER.log(Level.WARNING, message, t);
 	}
 }
